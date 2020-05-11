@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <data>
+        <variable
+            name="post"
+            type="com.example.myblog.model.Post" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".PostDetailActivity"
+        android:orientation="vertical"
+        android:padding="40dp"
+        >
+
+        <TextView
+            android:id="@+id/title_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:setPostText="@{post.title}"
+            android:textColor="#000"
+            android:textSize="30dp"
+            android:textAlignment="center"
+
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="#A0A0A0"
+            android:layout_marginBottom="10dp"
+            />
+        <TextView
+            android:id="@+id/body_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:setPostText="@{post.body}"
+            android:textSize="25dp"
+            android:textAlignment="center"
+            />
+
+    </LinearLayout>
+</layout>
