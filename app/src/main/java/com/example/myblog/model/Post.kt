@@ -2,11 +2,13 @@ package com.example.myblog.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import java.io.Serializable
 
-class Post() : Parcelable {
+class Post() : Serializable {
 
     var title: String = ""
     var body: String = ""
+    var id: Int = 0
 
     var isFetchedAll: Boolean = false
 
@@ -16,7 +18,8 @@ class Post() : Parcelable {
         isFetchedAll = parcel.readByte() != 0.toByte()
     }
 
-    constructor(title: String, body: String) : this() {
+    constructor(id: Int, title: String, body: String) : this() {
+        this.id = id
         this.title = title
         this.body = body
     }
@@ -25,15 +28,7 @@ class Post() : Parcelable {
         this.isFetchedAll = isFetchedAll
     }
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(title)
-        parcel.writeString(body)
-        parcel.writeByte(if (isFetchedAll) 1 else 0)
-    }
 
-    override fun describeContents(): Int {
-        return 0
-    }
 
     companion object CREATOR : Parcelable.Creator<Post> {
         override fun createFromParcel(parcel: Parcel): Post {

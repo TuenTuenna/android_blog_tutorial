@@ -45,7 +45,10 @@ class RetrofitManager {
                    fetchedPostsJsonArray.forEach {
                        var jsonObjectItem = it.asJsonObject
 
-                       val postItem = Post(title = jsonObjectItem.get("title").asString,
+                       Log.d(TAG, "RetrofitManager - jsonObjectItem.get(\"id\").asString : ${jsonObjectItem.get("id").asString}")
+
+                       val postItem = Post( id = jsonObjectItem.get("id").asInt,
+                                            title = jsonObjectItem.get("title").asString,
                                             body = jsonObjectItem.get("body").asString
                                             )
 
@@ -78,6 +81,36 @@ class RetrofitManager {
                 Log.d(TAG, "response.body : ${response.body()}")
 
                 completion()
+
+            }
+
+        })
+    }
+
+    // 포스팅 수정하기
+    fun editBlogPost(post_id: String, title: String, body: String, completion: (Post) -> Unit){
+        Log.d(TAG, "RetrofitManager - editBlogPost() called / post_id : $post_id , title: $title , body: $body")
+
+        val call = httpCall?.editPost(post_id, title, body)
+
+        call?.enqueue(object : retrofit2.Callback<JsonElement>{
+
+            override fun onFailure(call: Call<JsonElement>, t: Throwable) {
+                Log.d(TAG, "RetrofitManager - onFailure() called / t : $t")
+            }
+
+            override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {
+                Log.d(TAG, "RetrofitManager - onResponse() called / response.body : ${response.body()}")
+
+                response.body()?.let {
+                    val jsonObjectItem = it.asJsonObject
+                    val postItem = Post( id = jsonObjectItem.get("id").asInt,
+                        title = jsonObjectItem.get("title").asString,
+                        body = jsonObjectItem.get("body").asString
+                    )
+
+                    completion(postItem)
+                }
 
             }
 

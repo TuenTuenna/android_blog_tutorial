@@ -18,6 +18,7 @@ import com.example.myblog.adapter.PostsListAdapter
 import com.example.myblog.model.Post
 import com.example.myblog.retrofit.RetrofitManager
 import com.example.myblog.utils.Constants.CREATE_POST_ACTIVITY
+import com.example.myblog.utils.Constants.EDIT_POST_ACTIVITY
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -301,10 +302,17 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener, 
         Log.d(TAG, "MainActivity - blogPostCreated() called")
     }
 
+    override fun onResume() {
+        super.onResume()
+        reloadData()
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if(resultCode == Activity.RESULT_OK){
+
+            Log.d(TAG, "MainActivity - onActivityResult() called / resultCode : $resultCode")
 
             when(requestCode) {
 

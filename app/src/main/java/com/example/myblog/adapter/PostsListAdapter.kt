@@ -77,7 +77,12 @@ class PostsListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
                     val intent = Intent(App.instance, PostDetailActivity::class.java)
 
-                    intent.putExtra("postItem", postsList[position])
+                    val postItem = Post(postsList[position].id, postsList[position].title, postsList[position].body)
+
+                    intent.putExtra("postItem", postItem)
+
+                    Log.d(TAG, "PostsListAdapter - postsList[position].id : ${postsList[position].id}")
+                    Log.d(TAG, "PostsListAdapter - postItem.id : ${postItem.id}")
 
                     App.instance.startActivity(intent)
 

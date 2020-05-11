@@ -8,6 +8,10 @@ object Constants {
 
     const val API_POST_BLOGPOST = "post"
 
+    const val API_PUT_BLOGPOST = "post"
+
     const val CREATE_POST_ACTIVITY = 100
+
+    const val EDIT_POST_ACTIVITY = 101
 
 }

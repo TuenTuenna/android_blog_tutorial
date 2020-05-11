@@ -27,7 +27,6 @@
             android:textColor="#000"
             android:textSize="30dp"
             android:textAlignment="center"
-
             />
         <View
             android:layout_width="match_parent"
