@@ -6,16 +6,22 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myblog.App
-import com.example.myblog.PostDetailActivity
+import com.example.myblog.Interface.RecyclerViewItemInterface
+import com.example.myblog.activities.PostDetailActivity
 import com.example.myblog.R
 import com.example.myblog.model.Post
 
-class PostsListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PostsListAdapter(postItemInterface: RecyclerViewItemInterface) : RecyclerView.Adapter<PostViewHolder>() {
 
     val TAG: String = "로그"
 
     private var postsList : ArrayList<Post> = ArrayList()
 
+    var postItemInterface: RecyclerViewItemInterface? = null
+
+    init {
+        this.postItemInterface = postItemInterface
+    }
 
     companion object {
 
@@ -29,11 +35,11 @@ class PostsListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
 
         return when (viewType) {
-            TYPE_LIST -> PostViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_post_item, parent, false))
+            TYPE_LIST -> PostViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_post_item, parent, false), this.postItemInterface!!)
 
-            TYPE_EMPTY -> PostViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_empty_post_item, parent, false))
+            TYPE_EMPTY -> PostViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_empty_post_item, parent, false), this.postItemInterface!!)
 
-            else -> PostViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_post_item, parent, false))
+            else -> PostViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_post_item, parent, false), this.postItemInterface!!)
         }
 
     }
@@ -59,41 +65,16 @@ class PostsListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
 
-        // switch
-        when(holder) {
-
-
-            is PostViewHolder -> {
-
-                if (postsList.size > 0){
-                    // 데이터와 뷰를 묶어준다.
-                    holder.bind(postsList[position])
-                }
-
-                holder.itemView.setOnClickListener {
-                    Log.d(TAG, "PostsListAdapter - onBindViewHolder() / 아이템 클릭! / position : $position")
-
-                    val intent = Intent(App.instance, PostDetailActivity::class.java)
-
-                    val postItem = Post(postsList[position].id, postsList[position].title, postsList[position].body)
-
-                    intent.putExtra("postItem", postItem)
-
-                    Log.d(TAG, "PostsListAdapter - postsList[position].id : ${postsList[position].id}")
-                    Log.d(TAG, "PostsListAdapter - postItem.id : ${postItem.id}")
-
-                    App.instance.startActivity(intent)
-
-                }
-
-            }
-
-
+        if (postsList.size > 0){
+            // 데이터와 뷰를 묶어준다.
+            holder.bind(postsList[position])
         }
 
+
     }
+
 
 
     // 즉 총알을 넣는다.
@@ -113,7 +94,6 @@ class PostsListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     fun clearList() {
         this.postsList.clear()
     }
-
 
 
 }

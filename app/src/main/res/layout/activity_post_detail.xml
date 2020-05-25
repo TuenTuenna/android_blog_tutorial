@@ -11,11 +11,10 @@
             type="com.example.myblog.model.Post" />
     </data>
 
-    <LinearLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".PostDetailActivity"
-        android:orientation="vertical"
+        tools:context=".activities.PostDetailActivity"
         android:padding="40dp"
         >
 
@@ -26,22 +25,26 @@
             app:setPostText="@{post.title}"
             android:textColor="#000"
             android:textSize="30dp"
+            android:text="asdfasdfasdf"
             android:textAlignment="center"
             />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:background="#A0A0A0"
-            android:layout_marginBottom="10dp"
-            />
+
         <TextView
             android:id="@+id/body_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:setPostText="@{post.body}"
-            android:textSize="25dp"
+            android:text="asdfasdfasdf"
             android:textAlignment="center"
+            android:textSize="25dp"
+            app:setPostText="@{post.body}" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_share_24dp"
+            app:tint="@android:color/white"
+            android:layout_gravity="bottom|right"
             />
 
-    </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

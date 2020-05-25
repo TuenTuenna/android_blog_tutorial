@@ -1,4 +1,4 @@
-package com.example.myblog
+package com.example.myblog.activities
 
 import android.app.Activity
 import android.content.Intent
@@ -8,6 +8,8 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.databinding.DataBindingUtil
+import com.example.myblog.BR
+import com.example.myblog.R
 import com.example.myblog.databinding.ActivityPostDetailBinding
 import com.example.myblog.model.Post
 import com.example.myblog.utils.Constants.EDIT_POST_ACTIVITY
@@ -33,7 +35,9 @@ class PostDetailActivity : AppCompatActivity() {
         Log.d(TAG, "PostDetailActivity - onCreate() called / post.title : ${post.title}")
         Log.d(TAG, "PostDetailActivity - onCreate() called / post.body : ${post.body}")
 
-        val binding: ActivityPostDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_post_detail)
+        val binding: ActivityPostDetailBinding = DataBindingUtil.setContentView(this,
+            R.layout.activity_post_detail
+        )
 
         binding.setVariable(BR.post, post)
 

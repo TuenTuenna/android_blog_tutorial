@@ -1,13 +1,18 @@
-package com.example.myblog
+package com.example.myblog.activities
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.view.WindowManager
 import com.example.myblog.Interface.PostInterface
+import com.example.myblog.R
 import com.example.myblog.retrofit.RetrofitManager
+import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.android.synthetic.main.activity_create_post.*
 
 class CreatePostActivity : AppCompatActivity() {
@@ -29,6 +34,7 @@ class CreatePostActivity : AppCompatActivity() {
         setContentView(R.layout.activity_create_post)
 
 
+//        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 
         create_blog_post_button.setOnClickListener {
 
@@ -60,4 +66,69 @@ class CreatePostActivity : AppCompatActivity() {
 
 
     }
+
+    // 상단 메뉴 아이콘 설정
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+
+        Log.d(TAG, "CreatePostActivity - onCreateOptionsMenu() called")
+
+        val inflater = menuInflater
+        inflater.inflate(R.menu.post_create_menu, menu)
+
+        return true
+    }
+
+
+    // actions on click menu items
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+
+        R.id.menu_post_date -> {
+            Log.d(TAG, "MainActivity - 메뉴 날짜 클릭")
+
+
+            val builder = MaterialDatePicker.Builder.datePicker()
+
+            val picker = builder.build()
+
+            picker.show(supportFragmentManager, picker.toString())
+
+            picker.addOnCancelListener {
+                Log.d(TAG, "달력 취소!")
+            }
+
+            picker.addOnPositiveButtonClickListener {
+                Log.d(TAG, "Date String = ${picker.headerText}::  Date epoch values::${it}")
+
+
+                post_pending_date.visibility = View.VISIBLE
+                post_pending_date.text = "자동 포스팅 예정일: \n" + picker.headerText
+            }
+
+//            val intent = Intent(this, CreatePostActivity::class.java).apply {
+//
+//            }
+
+//            startActivityForResult(intent, CREATE_POST_ACTIVITY)
+
+            true
+        }
+        else -> {
+            // If we got here, the user's action was not recognized.
+            // Invoke the superclass to handle it.
+            super.onOptionsItemSelected(item)
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

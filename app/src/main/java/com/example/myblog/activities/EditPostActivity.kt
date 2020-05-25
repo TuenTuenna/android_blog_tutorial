@@ -1,14 +1,13 @@
-package com.example.myblog
+package com.example.myblog.activities
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
+import com.example.myblog.R
 import com.example.myblog.model.Post
 import com.example.myblog.retrofit.RetrofitManager
 import kotlinx.android.synthetic.main.activity_edit_post.*

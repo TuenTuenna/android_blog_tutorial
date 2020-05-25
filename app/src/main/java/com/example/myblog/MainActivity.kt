@@ -8,25 +8,30 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.myblog.Interface.PostInterface
+import com.example.myblog.Interface.RecyclerViewItemInterface
+import com.example.myblog.activities.CreatePostActivity
+import com.example.myblog.activities.PostDetailActivity
+import com.example.myblog.activities.ProfileActivity
 import com.example.myblog.adapter.PostsListAdapter
 import com.example.myblog.model.Post
 import com.example.myblog.retrofit.RetrofitManager
 import com.example.myblog.utils.Constants.CREATE_POST_ACTIVITY
-import com.example.myblog.utils.Constants.EDIT_POST_ACTIVITY
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.math.log
 
 
-class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener, PostInterface {
+class MainActivity : AppCompatActivity(),
+                    SwipeRefreshLayout.OnRefreshListener,
+                    PostInterface,
+                    RecyclerViewItemInterface
+                    {
 
     val TAG: String = "로그"
 
@@ -45,10 +50,14 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener, 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // api 호출을 통해 데이터를 가져올 예정
 
-
+        // 어답터를 메모리에 올린다.
+        this.postListAdapter = PostsListAdapter(this)
 
         swipe_refresh.setOnRefreshListener(this)
+
+//        this.postListAdapter.postItemInterface = this
 
         floating_button.setOnClickListener {
 
@@ -72,10 +81,6 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener, 
         })
 
 
-        // api 호출을 통해 데이터를 가져올 예정
-
-        // 어답터를 메모리에 올린다.
-        postListAdapter = PostsListAdapter()
 
 
         // 리사이클러뷰를 설정한다.
@@ -94,11 +99,6 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener, 
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
 
                     Log.d(TAG, "MainActivity - onScrolled() called / dx: $dx / dy: $dy")
-
-
-//                    Log.d(TAG, "MainActivity - recyclerView.adapter?.itemCount : ${recyclerView.adapter?.itemCount}")
-
-//                    recyclerView.adapter.
 
 
                     // 아래로 스크롤 하면
@@ -142,13 +142,9 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener, 
                             floating_button.visibility = View.INVISIBLE
                         }
 
-
-
                     } else if (!recyclerView.canScrollVertically(1)) {
 
                         page = page + 1
-
-//                        Log.i(TAG, "End of list / page : ${page}")
 
                         // 데이터를 다 가져오지 않았을때
                         if(isFetchedAll == false){
@@ -182,14 +178,11 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener, 
                                     // 빈유형의 포스트가 마지막 녀석이 아니면
                                     if(postList.last().isFetchedAll == false){
 
-
-
                                         postList.add(Post(isFetchedAll = true))
                                         postListAdapter.addEmptyPost(Post(isFetchedAll = true))
                                         postListAdapter.notifyDataSetChanged()
                                         recyclerView.setPadding(0,0,0,0)
                                     }
-//
 
                                 } else { // 데이터가 있을때
                                     postList.addAll(it)
@@ -226,7 +219,6 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener, 
 
 
     // actions on click menu items
-    //
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
 
         R.id.menu_add_post -> {
@@ -242,6 +234,11 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener, 
         }
         R.id.menu_profile -> {
             Log.d(TAG, "MainActivity - 메뉴 프로필 클릭")
+
+            val intent = Intent(this, ProfileActivity::class.java)
+
+            startActivity(intent)
+
             true
         }
         R.id.menu_setting -> {
@@ -327,6 +324,26 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener, 
         }
 
     }
+
+    // 리사이클러뷰 아이템이 클릭되었을때
+    override fun itemClicked(position: Int) {
+
+        val clickedPost = this.postList[position]
+
+        Log.d(TAG, "MainActivity - itemClicked() called / position: $position / clickedPost: ${clickedPost.title}")
+        Log.d(TAG, "PostsListAdapter - onBindViewHolder() / 아이템 클릭! / position : $position")
+
+        val intent = Intent(App.instance, PostDetailActivity::class.java)
+
+        intent.putExtra("postItem", clickedPost)
+
+        Log.d(TAG, "PostsListAdapter - clickedPost.id : ${clickedPost.id}")
+        Log.d(TAG, "PostsListAdapter - clickedPost.title : ${clickedPost.title}")
+
+        App.instance.startActivity(intent)
+    }
+
+
 
 
 }
